@@ -13,7 +13,7 @@ const reducer = (state: state, actions: actions) => {
 
 export const App = () => {
   const [state, dispatch] = useReducer(reducer, initial);
-  const validateLogin = Object.keys(state.user).every((item) => state.user[item as "name" | "photo" | "email"].length);
+  const validateLogin = Object.keys(state.user).every((item) => state.user[item as "name" | "photo" | "email"]?.length);
 
   useEffect(() => {
     window.addEventListener("resize", () => dispatch({ type: "resize" }));
