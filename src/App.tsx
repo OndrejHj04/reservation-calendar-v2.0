@@ -31,7 +31,9 @@ export const App = () => {
       localStorage.removeItem("user");
     }
   }, [validateLogin, state.user]);
-  
+
+  console.log(state.user, validateLogin)
+
   return (
     <BrowserRouter>
       <Routes>
