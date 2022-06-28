@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#calendar-container{
+    box-shadow: 1px 1px 20px 5px grey;
+}
+
+::-webkit-scrollbar{
+    display: none;
+}
