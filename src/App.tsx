@@ -9,7 +9,7 @@ const reducer = (state: state, actions: actions) => {
     case "resize":
       return { ...state, height: window.innerHeight, width: window.innerWidth };
     case "user":
-      return { ...state, user: { ...state.user, name: actions.name, email: actions.email, photo: actions.photo } };
+      return { ...state, user: { ...state.user, name: actions.name?actions.name:"", email: actions.email?actions.email:"", photo: actions.photo?actions.photo:"" } };
     case "logout":
       return { ...state, user: initial.user };
   }
