@@ -11,9 +11,9 @@ export const Dashboard = ({ state, dispatch, validateInput }: { state: state; di
   };
 
   useEffect(() => {
-    !validateInput && logout();
-  }, []);
-
+    !validateInput && navigate("/");
+  }, [validateInput, navigate]);
+  
   return (
     <>
       <div style={{ height: state.height, minHeight: state.width > 1024 ? "800px" : "" }} className="flex w-full flex-col lg:flex-row">
