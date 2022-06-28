@@ -11,4 +11,8 @@ type user = {
   photo: string,
   name: string
 }
-export type actions = resize | user;
+
+type logout = {
+  type: "logout"
+}
+export type actions = resize | user | logout;
