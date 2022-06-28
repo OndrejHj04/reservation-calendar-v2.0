@@ -11,7 +11,8 @@ export const SignIn = ({ state, dispatch, validateLogin }: { state: state, dispa
 
   useEffect(()=>{
     validateLogin&&navigate("/dashboard")
-  },[validateLogin])
+  },[validateLogin, navigate])
+  console.log('xd')
   return (
     <>
       <div style={{ height: state.height }} className="flex w-screen">
