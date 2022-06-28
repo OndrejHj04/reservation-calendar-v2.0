@@ -2,7 +2,7 @@ import { useEffect, useReducer } from "react";
 import { SignIn } from "./components/SignIn";
 import { actions, initial, state } from "./support/types";
 import { Dashboard } from "./components/Dashboard";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const reducer = (state: state, actions: actions) => {
   switch (actions.type) {
