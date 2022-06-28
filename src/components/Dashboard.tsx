@@ -9,10 +9,6 @@ export const Dashboard = ({ state, dispatch, validateInput }: { state: state; di
     dispatch({ type: "logout" });
     navigate("/");
   };
-
-  useEffect(() => {
-    !validateInput && navigate("/");
-  }, [validateInput, navigate]);
   
   return (
     <>
