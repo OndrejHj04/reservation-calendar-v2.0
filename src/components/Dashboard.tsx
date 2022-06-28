@@ -1,13 +1,18 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { state } from "../support/types";
 import { actions } from "../support/types";
-export const Dashboard = ({ state, dispatch }: { state: state, dispatch: React.Dispatch<actions> }) => {
-  
-  const navigate = useNavigate()
+export const Dashboard = ({ state, dispatch, validateInput }: { state: state; dispatch: React.Dispatch<actions>; validateInput: boolean }) => {
+  const navigate = useNavigate();
+
   const logout = () => {
-    dispatch({type: "logout"})
-    navigate("/")
-  }
+    dispatch({ type: "logout" });
+    navigate("/");
+  };
+
+  useEffect(() => {
+    !validateInput && logout();
+  }, []);
 
   return (
     <>
@@ -33,11 +38,10 @@ export const Dashboard = ({ state, dispatch }: { state: state, dispatch: React.D
             </div>
 
             <div className="flex mt-auto">
-              <img src={state.user.photo} alt="" className="rounded-full w-16 my-auto"/>
+              <img src={state.user.photo} alt="" className="rounded-full w-16 my-auto" />
               <p className="text-xl my-auto mx-2 w-full text-center">{state.user.name}</p>
-              <img src={require("../images/logout.png")} alt="" className="w-16  ml-auto" onClick={logout}/>
+              <img src={require("../images/logout.png")} alt="" className="w-16  ml-auto" onClick={logout} />
             </div>
-
           </div>
         </div>
       </div>

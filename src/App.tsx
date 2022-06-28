@@ -3,7 +3,7 @@ import { SignIn } from "./components/SignIn";
 import { actions, initial, state } from "./support/types";
 import { Dashboard } from "./components/Dashboard";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import { FourOhFour } from "./support/FourOhFour";
 const reducer = (state: state, actions: actions) => {
   switch (actions.type) {
     case "resize":
@@ -31,12 +31,13 @@ export const App = () => {
       localStorage.removeItem("user");
     }
   }, [validateLogin, state.user]);
-
+  console.log(state.user)
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<SignIn state={state} dispatch={dispatch} validateLogin={validateLogin} />}></Route>
-        {validateLogin&&<Route path="/dashboard" element={<Dashboard state={state} dispatch={dispatch} />}></Route>}
+        <Route path="/dashboard" element={<Dashboard state={state} dispatch={dispatch} validateInput={validateLogin}/>}></Route>
+        <Route path="*" element={<FourOhFour/>}/>
       </Routes>
     </BrowserRouter>
   );
