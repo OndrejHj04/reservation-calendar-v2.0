@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { state } from "../support/types";
 import { actions } from "../support/types";
