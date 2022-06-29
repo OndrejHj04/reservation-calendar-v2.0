@@ -5,7 +5,7 @@ import { Calendar } from "./Calendar";
 import { Panel } from "./Panel";
 export const Dashboard = ({ state, dispatch, validateInput }: { state: state; dispatch: React.Dispatch<actions>; validateInput: boolean }) => {
   const loading = useRef<HTMLImageElement>(null);
-
+  const month = new Date(new Date().getFullYear(), state.monthCount).toLocaleDateString("cs", {month: "long"})
 
   useEffect(() => {
     !validateInput && dispatch({ type: "loading", value: true });
@@ -21,8 +21,8 @@ export const Dashboard = ({ state, dispatch, validateInput }: { state: state; di
       ) : (
         <div style={{ height: state.height, minHeight: state.width > 1024 ? "800px" : "" }} className="flex w-full flex-col lg:flex-row">
 
-          {<Calendar />}
-          {<Panel state={state} dispatch={dispatch}/>}
+          {<Calendar state={state}/>}
+          {<Panel month={month} state={state} dispatch={dispatch}/>}
         </div>
       )}
     </>

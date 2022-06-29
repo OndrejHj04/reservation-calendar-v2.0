@@ -14,6 +14,17 @@ const reducer = (state: state, actions: actions) => {
       return { ...state, user: initial.user };
     case "loading":
       return { ...state, loading: actions.value };
+    case "change-month":
+      const validMonth = () => {
+        if(actions.action === "increase"&&state.monthCount < 17){
+          return state.monthCount+1
+        }else if(actions.action === "decrease"&&state.monthCount > 8){
+          return state.monthCount-1
+        }
+        return state.monthCount;
+      };
+      
+      return { ...state, monthCount: validMonth()};
   }
 };
 

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { actions, state } from "../support/types";
 
-export const Panel = ({ state,dispatch }: { state: state, dispatch:React.Dispatch<actions> }) => {
+export const Panel = ({ state, dispatch, month }: { state: state; dispatch: React.Dispatch<actions>, month: string }) => {
   const navigate = useNavigate();
 
   const logout = () => {
@@ -9,13 +9,46 @@ export const Panel = ({ state,dispatch }: { state: state, dispatch:React.Dispatc
     navigate("/");
   };
 
+
   return (
     <div className="flex-1 h-full  pb-3 px-3 lg:p-10 lg:pl-0">
       <div className="w-full h-full rounded-3xl p-2 flex flex-col" id="calendar-container">
-        <div className="flex ">
-          <img src={require("../images/right.png")} alt="" className="w-10 rotate-180" />
-          <h1 className="m-auto lg:text-4xl text-3xl">prosinec</h1>
-          <img src={require("../images/right.png")} alt="" className="w-10" />
+        <div className="flex">
+          <img src={require("../images/right.png")} alt="" className="w-10 rotate-180" onClick={()=>dispatch({type: "change-month", action: "decrease"})}/>
+          <h1 className="m-auto lg:text-4xl text-3xl">{month}</h1>
+          <img src={require("../images/right.png")} alt="" className="w-10" onClick={()=>dispatch({type: "change-month", action: "increase"})}/>
+        </div>
+
+        <div className="text-3xl m-2">
+          <div className="flex justify-between flex-wrap">
+            <div>
+              <label htmlFor="">day:</label>
+              <input type="text" className="border-b-2 border-black outline-none w-10 text-center" />
+            </div>
+
+            <div>
+              <label htmlFor="">month:</label>
+              <input type="text" className="border-b-2 border-black outline-none w-32 text-center" />
+            </div>
+          </div>
+
+          <div className="flex justify-between flex-wrap">
+            <div>
+              <label htmlFor="">from:</label>
+              <input type="text" className="border-b-2 border-black outline-none w-10 text-center" />:
+              <input type="text" className="border-b-2 border-black outline-none w-10 text-center" />
+            </div>
+
+            <div>
+              <label htmlFor="">to:</label>
+              <input type="text" className="border-b-2 border-black outline-none w-10 text-center" />:
+              <input type="text" className="border-b-2 border-black outline-none w-10 text-center" />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-y-scroll my-2">
+            
         </div>
 
         <div className="flex mt-auto">
