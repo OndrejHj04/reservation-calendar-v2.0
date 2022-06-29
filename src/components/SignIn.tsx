@@ -7,11 +7,7 @@ export const SignIn = ({ state, dispatch, validateLogin }: { state: state, dispa
   const login = () => {
     signInWithGoogle().then(res=>dispatch({type: "user", email: res.user.email!, photo: res.user.photoURL!, name: res.user.displayName!}))
   };
-  const navigate = useNavigate()
 
-  useEffect(()=>{
-    validateLogin&&navigate("/dashboard")
-  },[validateLogin, navigate])
 
   return (
     <>
