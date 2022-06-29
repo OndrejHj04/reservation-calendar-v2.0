@@ -9,41 +9,31 @@ const reducer = (state: state, actions: actions) => {
     case "resize":
       return { ...state, height: window.innerHeight, width: window.innerWidth };
     case "user":
-      return { ...state, user: { ...state.user, name: actions.name?actions.name:"", email: actions.email?actions.email:"", photo: actions.photo?actions.photo:"" } };
+      return { ...state, user: { ...state.user, name: actions.name ? actions.name : "", email: actions.email ? actions.email : "", photo: actions.photo ? actions.photo : "" } };
     case "logout":
       return { ...state, user: initial.user };
     case "loading":
-      return {...state, loading: actions.value}
+      return { ...state, loading: actions.value };
   }
 };
 
 export const App = () => {
   const [state, dispatch] = useReducer(reducer, initial);
   const validateLogin = Object.keys(state.user).every((item) => state.user[item as "name" | "photo" | "email"]?.length);
-  
-  const navigation = useNavigate()
+
+  const navigation = useNavigate();
   useEffect(() => {
     window.addEventListener("resize", () => dispatch({ type: "resize" }));
     dispatch({ type: "user", ...JSON.parse(localStorage.getItem("user")!) });
   }, []);
 
-  useEffect(() => {
-    if (validateLogin) {
-      localStorage.setItem("user", JSON.stringify(state.user));
-      navigation("/dashboard")
-    } else {
-      localStorage.removeItem("user");
-      navigation("/")
-    }
-  }, [validateLogin, state.user]);
+  useEffect(() => (validateLogin ? (localStorage.setItem("user", JSON.stringify(state.user)), navigation("/dashboard")) : (localStorage.removeItem("user"), navigation("/"))), [validateLogin, state.user, navigation]);
 
   return (
-
-      <Routes>
-        <Route path="/" element={<SignIn state={state} dispatch={dispatch} validateLogin={validateLogin} />}></Route>
-        <Route path="/dashboard" element={<Dashboard state={state} dispatch={dispatch} validateInput={validateLogin}/>}></Route>
-        <Route path="*" element={<FourOhFour/>}/>
-      </Routes>
-
+    <Routes>
+      <Route path="/" element={<SignIn state={state} dispatch={dispatch} validateLogin={validateLogin} />}></Route>
+      <Route path="/dashboard" element={<Dashboard state={state} dispatch={dispatch} validateInput={validateLogin} />}></Route>
+      <Route path="*" element={<FourOhFour />} />
+    </Routes>
   );
 };

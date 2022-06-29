@@ -10,7 +10,7 @@ export const Dashboard = ({ state, dispatch, validateInput }: { state: state; di
   useEffect(() => {
     !validateInput && dispatch({ type: "loading", value: true });
     validateInput && dispatch({ type: "loading", value: false });
-  }, [validateInput]);
+  }, [validateInput, dispatch]);
 
   return (
     <>
