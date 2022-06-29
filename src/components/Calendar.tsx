@@ -24,7 +24,7 @@ export const Calendar = ({ state }: { state: state }) => {
       <div className="w-full h-full rounded-3xl flex flex-col lg:grid grid-rows-5 grid-cols-7 overflow-scroll lg:overflow-hidden bg-slate-300 gap-1" id="calendar-container">
         {[...Array(new Date(new Date().getFullYear() - 1, state.monthCount + 1, 0).getDate())].map((undef, i) => {
           return (
-            <div key={i + 1} className={`${i + 1 === 1 && `bg-red-300 `} bg-white p-2`}>
+            <div key={i + 1} className={`${i + 1 === new Date().getDate() && new Date().getMonth() + 12 === state.monthCount && "border-b-8 border-red-500"} bg-white p-2 ${i === 0 && (new Date(new Date().getFullYear() - 1, state.monthCount, 1).getDay().toString() === "0" ? "col-start-7" : "col-start-" + new Date(new Date().getFullYear() - 1, state.monthCount, 1).getDay().toString())}`}>
               <p>{i + 1}</p>
             </div>
           );

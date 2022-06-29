@@ -10,6 +10,7 @@ export const Panel = ({ state, dispatch, month }: { state: state; dispatch: Reac
   };
 
 
+
   return (
     <div className="flex-1 h-full  pb-3 px-3 lg:p-10 lg:pl-0">
       <div className="w-full h-full rounded-3xl p-2 flex flex-col" id="calendar-container">
