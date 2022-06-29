@@ -1,7 +1,5 @@
 import { actions, state } from "../support/types";
 import { signInWithGoogle } from "../support/firebase";
-import { useEffect } from "react";
-import { useNavigate } from "react-router";
 
 export const SignIn = ({ state, dispatch, validateLogin }: { state: state, dispatch: React.Dispatch<actions>, validateLogin: boolean }) => {
   const login = () => {
