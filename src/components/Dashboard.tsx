@@ -21,7 +21,7 @@ export const Dashboard = ({ state, dispatch, validateInput }: { state: state; di
       ) : (
         <div style={{ height: state.height, minHeight: state.width > 1024 ? "800px" : "" }} className="flex w-full flex-col lg:flex-row">
 
-          {<Calendar state={state}/>}
+          {<Calendar dispatch={dispatch} state={state}/>}
           {<Panel month={month} state={state} dispatch={dispatch}/>}
         </div>
       )}

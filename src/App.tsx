@@ -25,13 +25,17 @@ const reducer = (state: state, actions: actions) => {
       };
       
       return { ...state, monthCount: validMonth()};
+    case "auto-input":
+      return {...state, form: {...state.form, day: actions.day.toString(), month: new Date(new Date().getFullYear(), actions.month).toLocaleDateString("cs", {month: "long"})}}
+    case "input":
+      return {...state, form: {...state.form, [actions.name]: actions.value}}
   }
 };
 
 export const App = () => {
   const [state, dispatch] = useReducer(reducer, initial);
   const validateLogin = Object.keys(state.user).every((item) => state.user[item as "name" | "photo" | "email"]?.length);
-
+  
   const navigation = useNavigate();
   useEffect(() => {
     window.addEventListener("resize", () => dispatch({ type: "resize" }));
