@@ -34,19 +34,20 @@ export const Panel = ({ state, dispatch, month }: { state: state; dispatch: Reac
           <div className="flex justify-between sm:flex-row flex-col">
             <div className="flex">
               <label htmlFor="">from:</label>&nbsp;
-              <input type="text" className="border-b-2 border-black outline-none w-14 text-center ml-auto" name="fromHours" onChange={e=>dispatch({type: "input", name: e.target.name, value: e.target.value})}/>
+              <input type="number" className="border-b-2 border-black outline-none w-14 text-center ml-auto" name="fromHours" onChange={e=>dispatch({type: "input", name: e.target.name, value: e.target.value})} value={state.form.fromHours}/>
               &nbsp;:&nbsp;
-              <input type="text" className="border-b-2 border-black outline-none w-14 text-center" name="fromMinutes" onChange={e=>dispatch({type: "input", name: e.target.name, value: e.target.value})}/>
+              <input type="number" className="border-b-2 border-black outline-none w-14 text-center" name="fromMinutes" onChange={e=>dispatch({type: "input", name: e.target.name, value: e.target.value})} value={state.form.fromMinutes}/>
             </div>
 
             <div className="flex">
               <label htmlFor="">to:</label>&nbsp;
-              <input type="text" className="border-b-2 border-black outline-none w-14 text-center ml-auto" name="toHours" onChange={e=>dispatch({type: "input", name: e.target.name, value: e.target.value})}/>
+              <input type="number" className="border-b-2 border-black outline-none w-14 text-center ml-auto" name="toHours" onChange={e=>dispatch({type: "input", name: e.target.name, value: e.target.value})} value={state.form.toHours}/>
               &nbsp;:&nbsp;
-              <input type="text" className="border-b-2 border-black outline-none w-14 text-center" name="toMinutes" onChange={e=>dispatch({type: "input", name: e.target.name, value: e.target.value})}/>
+              <input type="number" className="border-b-2 border-black outline-none w-14 text-center" name="toMinutes" onChange={e=>dispatch({type: "input", name: e.target.name, value: e.target.value})} value={state.form.toMinutes}/>
             </div>
           </div>
           <button>submit</button>
+          <p className="text-red-500 font-semibold text-lg" data-cy="error">{state.error}</p>
         </div>
 
         <div className="flex-1 overflow-y-scroll my-2"></div>
