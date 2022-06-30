@@ -22,34 +22,33 @@ export const Panel = ({ state, dispatch, month }: { state: state; dispatch: Reac
           <div className="flex justify-between sm:flex-row flex-col">
             <div className="flex">
               <label htmlFor="">day:</label>&nbsp;
-              <input type="text" className="border-b-2 border-black outline-none w-14 text-center ml-auto" readOnly value={state.form.day}/>
+              <input type="text" className="border-b-2 border-black outline-none w-14 text-center ml-auto" readOnly value={state.form.day} />
             </div>
 
             <div className="flex">
               <label htmlFor="">month:</label>&nbsp;
-              <input type="text" className="border-b-2 border-black outline-none w-40 text-center ml-auto" readOnly value={state.form.month}/>
+              <input type="text" className="border-b-2 border-black outline-none w-40 text-center ml-auto" readOnly value={state.form.month} />
             </div>
           </div>
 
           <div className="flex justify-between sm:flex-row flex-col">
             <div className="flex">
               <label htmlFor="">from:</label>&nbsp;
-              <input type="number" className="border-b-2 border-black outline-none w-14 text-center ml-auto" name="fromHours" onChange={e=>dispatch({type: "input", name: e.target.name, value: e.target.value})} value={state.form.fromHours}/>
+              <input type="number" onClick={() => dispatch({ type: "focus", id: 0 })} className="border-b-2 border-black outline-none w-14 text-center ml-auto" name="fromHours" onChange={(e) => dispatch({ type: "input", name: e.target.name, value: e.target.value })} value={state.form.inputs.fromHours} />
               &nbsp;:&nbsp;
-              <input type="number" className="border-b-2 border-black outline-none w-14 text-center" name="fromMinutes" onChange={e=>dispatch({type: "input", name: e.target.name, value: e.target.value})} value={state.form.fromMinutes}/>
+              <input type="number" onClick={() => dispatch({ type: "focus", id: 1 })} className="border-b-2 border-black outline-none w-14 text-center" name="fromMinutes" onChange={(e) => dispatch({ type: "input", name: e.target.name, value: e.target.value })} value={state.form.inputs.fromMinutes} />
             </div>
 
             <div className="flex">
               <label htmlFor="">to:</label>&nbsp;
-              <input type="number" className="border-b-2 border-black outline-none w-14 text-center ml-auto" name="toHours" onChange={e=>dispatch({type: "input", name: e.target.name, value: e.target.value})} value={state.form.toHours}/>
+              <input type="number" onClick={() => dispatch({ type: "focus", id: 2 })} className="border-b-2 border-black outline-none w-14 text-center ml-auto" name="toHours" onChange={(e) => dispatch({ type: "input", name: e.target.name, value: e.target.value })} value={state.form.inputs.toHours} />
               &nbsp;:&nbsp;
-              <input type="number" className="border-b-2 border-black outline-none w-14 text-center" name="toMinutes" onChange={e=>dispatch({type: "input", name: e.target.name, value: e.target.value})} value={state.form.toMinutes}/>
+              <input type="number" onClick={() => dispatch({ type: "focus", id: 3 })} className="border-b-2 border-black outline-none w-14 text-center" name="toMinutes" onChange={(e) => dispatch({ type: "input", name: e.target.name, value: e.target.value })} value={state.form.inputs.toMinutes} />
             </div>
           </div>
-          <button>submit</button>
-          <p className="text-red-500 font-semibold text-lg" data-cy="error">{state.error}</p>
+          <button onClick={() => dispatch({ type: "submit" })}>submit</button>
         </div>
-
+        {!!state.message.length && <p data-cy="message">{state.message}</p>}
         <div className="flex-1 overflow-y-scroll my-2"></div>
 
         <div className="flex mt-auto">

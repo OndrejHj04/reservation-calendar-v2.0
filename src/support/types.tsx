@@ -1,7 +1,7 @@
-export const initial = { error: "", form: { day: "", month: "", fromHours: "", fromMinutes: "", toHours: "", toMinutes: "" }, monthCount: new Date().getMonth() + 12, loading: true, height: window.innerHeight, width: window.innerWidth, sign: true, user: { email: "", photo: "", name: "" } };
-export type form = { day: string; month: string; fromHours: string; fromMinutes: string; toHours: string; toMinutes: string }
+export type form = { day: string; month: string; name: string, inputs: { fromHours: string; fromMinutes: string; toHours: string; toMinutes: string } };
 
-export type state = { error: string, form: form; monthCount: number; loading: boolean; height: number; width: number; sign: boolean; user: { email: string; photo: string; name: string } };
+export const initial = { administartionData: [], message: "", focus: 0, form: { day: "", month: "", name: "", inputs: { fromHours: "", fromMinutes: "", toHours: "", toMinutes: "" } }, monthCount: new Date().getMonth() + 12, loading: [], height: window.innerHeight, width: window.innerWidth, sign: true, user: { email: "", photo: "", name: "" } };
+export type state = { administartionData: form[], message: string; focus: number; form: form; monthCount: number; loading: boolean[]; height: number; width: number; sign: boolean; user: { email: string; photo: string; name: string } };
 type resize = {
   type: "resize";
 };
@@ -15,11 +15,6 @@ type user = {
 
 type logout = {
   type: "logout";
-};
-
-type loading = {
-  type: "loading";
-  value: boolean;
 };
 
 type changeMonth = {
@@ -39,4 +34,17 @@ type autoInput = {
   month: number;
 };
 
-export type actions = resize | user | logout | loading | changeMonth | autoInput | input;
+type focus = {
+  type: "focus";
+  id: number;
+};
+
+type submit = {
+  type: "submit";
+};
+
+type administartionData = {
+  type: "administartion-data",
+  data: form[]
+}
+export type actions = resize | user | logout | changeMonth | autoInput | input | focus | submit | administartionData;

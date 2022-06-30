@@ -5,7 +5,7 @@ import { Dashboard } from "./components/Dashboard";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { FourOhFour } from "./support/FourOhFour";
 import { initializeApp } from "firebase/app";
-import { doc, getFirestore, setDoc } from "firebase/firestore";
+import { collection, doc, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
 import { nanoid } from "nanoid";
 const firebaseConfig = {
   apiKey: "AIzaSyCWBAGCwPFPHi_RNYApa8n-mFCt1lprG-4",
@@ -17,7 +17,14 @@ const firebaseConfig = {
 };
 initializeApp(firebaseConfig);
 const db = getFirestore();
+const validateSubmit = (form: form) => {
+  const condition1 = form.day.length && form.month.length && Object.keys(form.inputs).every((item) => form.inputs[(item as "fromHours", "toHours", "fromMinutes", "toMinutes")].length); //each item should have at least some length
+  const condition2 = Number(form.inputs.fromHours) > 7 && Number(form.inputs.toHours) > 7 && Number(form.inputs.fromHours) < 19 && Number(form.inputs.toHours) < 19; //hours must be between 8 and 18
+  const condition3 = Number(form.inputs.fromMinutes) > -1 && Number(form.inputs.toMinutes) > -1 && Number(form.inputs.fromMinutes) < 59 && Number(form.inputs.toMinutes) < 59; //seconds must be between 0 and  59
+  const condition4 = (Number(form.inputs.toHours) - Number(form.inputs.fromHours)) * 60 + (Number(form.inputs.toMinutes) - Number(form.inputs.fromMinutes)) >= 30;
 
+  return Boolean(condition1 && condition2 && condition3 && condition4);
+};
 const reducer = (state: state, actions: actions) => {
   switch (actions.type) {
     case "resize":
@@ -26,8 +33,6 @@ const reducer = (state: state, actions: actions) => {
       return { ...state, user: { ...state.user, name: actions.name ? actions.name : "", email: actions.email ? actions.email : "", photo: actions.photo ? actions.photo : "" } };
     case "logout":
       return { ...state, user: initial.user };
-    case "loading":
-      return { ...state, loading: actions.value };
     case "change-month":
       const validMonth = () => {
         if (actions.action === "increase" && state.monthCount < 17) {
@@ -40,20 +45,39 @@ const reducer = (state: state, actions: actions) => {
 
       return { ...state, monthCount: validMonth() };
     case "auto-input":
-      return { ...state, form: { ...state.form, day: actions.day.toString(), month: new Date(new Date().getFullYear(), actions.month).toLocaleDateString("cs", { month: "long" }) } };
+      return { ...state, form: { ...state.form, name: state.user.name, day: actions.day.toString(), month: new Date(new Date().getFullYear(), actions.month).toLocaleDateString("cs", { month: "long" }) }, focus: initial.focus };
     case "input":
-      return { ...state, form: { ...state.form, [actions.name]: actions.value }, error: "" };
+      return { ...state, form: { ...state.form, inputs: { ...state.form.inputs, [actions.name]: actions.value } } };
+    case "focus":
+      return { ...state, focus: actions.id };
+    case "submit":
+      if (validateSubmit(state.form)) {
+        const id = nanoid();
+        setDoc(doc(db, "waiting-for-accept", id), {
+          ...state.form,
+        });
+        return { ...state, form: initial.form, message: "Úspěšně odesláno!" };
+      } else {
+        return { ...state, message: "Termíny lze rezervovat od 8 do 18 hodin včetně a nejméně na 30 minut." };
+      }
+    case "administartion-data":
+      return { ...state, administartionData: actions.data, loading: [...state.loading, true] };
   }
 };
 
 export const App = () => {
   const [state, dispatch] = useReducer(reducer, initial);
   const validateLogin = Object.keys(state.user).every((item) => state.user[item as "name" | "photo" | "email"]?.length);
-
   const navigation = useNavigate();
   useEffect(() => {
     window.addEventListener("resize", () => dispatch({ type: "resize" }));
     dispatch({ type: "user", ...JSON.parse(localStorage.getItem("user")!) });
+
+    onSnapshot(collection(db, "waiting-for-accept"), (item) => {
+      let arr: form[] = [];
+      item.forEach((doc) => arr.push(doc.data() as form));
+      dispatch({ type: "administartion-data", data: arr });
+    });
   }, []);
 
   useEffect(() => (validateLogin ? (localStorage.setItem("user", JSON.stringify(state.user)), navigation("/dashboard")) : (localStorage.removeItem("user"), navigation("/"))), [validateLogin, state.user, navigation]);
