@@ -5,7 +5,7 @@ import { Dashboard } from "./components/Dashboard";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { FourOhFour } from "./support/FourOhFour";
 import { initializeApp } from "firebase/app";
-import { collection, doc, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
 import { nanoid } from "nanoid";
 const firebaseConfig = {
   apiKey: "AIzaSyCWBAGCwPFPHi_RNYApa8n-mFCt1lprG-4",
@@ -45,7 +45,7 @@ const reducer = (state: state, actions: actions) => {
 
       return { ...state, monthCount: validMonth() };
     case "auto-input":
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+      state.width < 1024 && window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
       return { ...state, form: { ...state.form, name: state.user.name, day: actions.day.toString(), month: new Date(new Date().getFullYear(), actions.month).toLocaleDateString("cs", { month: "long" }) }, focus: initial.focus };
     case "input":
       return { ...state, form: { ...state.form, inputs: { ...state.form.inputs, [actions.name]: actions.value } } };
@@ -56,6 +56,7 @@ const reducer = (state: state, actions: actions) => {
         const id = nanoid();
         setDoc(doc(db, "waiting-for-accept", id), {
           ...state.form,
+          id: id,
         });
         return { ...state, form: initial.form, message: "Úspěšně odesláno!" };
       } else {
@@ -63,7 +64,21 @@ const reducer = (state: state, actions: actions) => {
       }
     case "administartion-data":
       return { ...state, administartionData: actions.data, loading: [...state.loading, true] };
-  }
+    case "administration":
+      return { ...state, administration: !state.administration };
+    case "set-to-calendar":
+        actions.act &&
+        setDoc(doc(db, "accepted", actions.item.id.toString()), {
+          ...actions.item,
+        });
+      deleteDoc(doc(db, "waiting-for-accept", actions.item.id.toString()));
+      return { ...state };
+      
+    case "calendar-data":
+      
+      return {...state, calendarData: actions.data, loading: [...state.loading, true]}
+    }
+  
 };
 
 export const App = () => {
@@ -79,10 +94,16 @@ export const App = () => {
       item.forEach((doc) => arr.push(doc.data() as form));
       dispatch({ type: "administartion-data", data: arr });
     });
+
+    onSnapshot(collection(db, "accepted"), item=>{
+      let arr: form[] = []
+      item.forEach((doc) => arr.push(doc.data() as form));
+      dispatch({ type: "calendar-data", data: arr });
+    })
   }, []);
 
   useEffect(() => (validateLogin ? (localStorage.setItem("user", JSON.stringify(state.user)), navigation("/dashboard")) : (localStorage.removeItem("user"), navigation("/"))), [validateLogin, state.user, navigation]);
-
+  
   return (
     <Routes>
       <Route path="/" element={<SignIn state={state} dispatch={dispatch} validateLogin={validateLogin} />}></Route>

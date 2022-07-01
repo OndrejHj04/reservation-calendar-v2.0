@@ -1,7 +1,7 @@
-export type form = { day: string; month: string; name: string, inputs: { fromHours: string; fromMinutes: string; toHours: string; toMinutes: string } };
+export type form = { day: string; month: string; name: string, id:number, inputs: { fromHours: string; fromMinutes: string; toHours: string; toMinutes: string } };
 
-export const initial = { administartionData: [], message: "", focus: 0, form: { day: "", month: "", name: "", inputs: { fromHours: "", fromMinutes: "", toHours: "", toMinutes: "" } }, monthCount: new Date().getMonth() + 12, loading: [], height: window.innerHeight, width: window.innerWidth, sign: true, user: { email: "", photo: "", name: "" } };
-export type state = { administartionData: form[], message: string; focus: number; form: form; monthCount: number; loading: boolean[]; height: number; width: number; sign: boolean; user: { email: string; photo: string; name: string } };
+export const initial = { calendarData: [], administration: false, administartionData: [], message: "", focus: 0, form: { id: 0, day: "", month: "", name: "", inputs: { fromHours: "", fromMinutes: "", toHours: "", toMinutes: "" } }, monthCount: new Date().getMonth() + 12, loading: [], height: window.innerHeight, width: window.innerWidth, sign: true, user: { email: "", photo: "", name: "" } };
+export type state = { calendarData: form[], administration:boolean, administartionData: form[], message: string; focus: number; form: form; monthCount: number; loading: boolean[]; height: number; width: number; sign: boolean; user: { email: string; photo: string; name: string } };
 type resize = {
   type: "resize";
 };
@@ -47,4 +47,19 @@ type administartionData = {
   type: "administartion-data",
   data: form[]
 }
-export type actions = resize | user | logout | changeMonth | autoInput | input | focus | submit | administartionData;
+
+type administartion = {
+  type: "administration"
+}
+
+type setToCalendar = {
+  type: "set-to-calendar",
+  item: form,
+  act: boolean
+}
+
+type  calendarData = {
+  type:  "calendar-data",
+  data: form[]
+}
+export type actions = resize | user | logout | changeMonth | autoInput | input | focus | submit | administartionData | administartion | setToCalendar | calendarData;

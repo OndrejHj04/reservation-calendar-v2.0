@@ -8,18 +8,18 @@ export const Panel = ({ state, dispatch, month }: { state: state; dispatch: Reac
     dispatch({ type: "logout" });
     navigate("/");
   };
-
+  
   return (
-    <div className="flex-1 h-full  p-1 lg:p-10 lg:pl-0">
+    <div className="flex-1 h-full p-1 lg:p-10 lg:pl-0">
       <div className="w-full h-full rounded-3xl p-2 flex flex-col" id="calendar-container">
-        <div className="flex">
+        <div className="flex flex-wrap">
           <img src={require("../images/right.png")} alt="" className="w-10 rotate-180" onClick={() => dispatch({ type: "change-month", action: "decrease" })} />
           <h1 className="m-auto lg:text-4xl text-3xl">{month}</h1>
           <img src={require("../images/right.png")} alt="" className="w-10" onClick={() => dispatch({ type: "change-month", action: "increase" })} />
         </div>
 
         <div className="text-3xl m-2">
-          <div className="flex justify-between sm:flex-row flex-col">
+          <div className="flex justify-between sm:flex-row flex-col flex-wrap">
             <div className="flex">
               <label htmlFor="">day:</label>&nbsp;
               <input type="text" className="border-b-2 border-black outline-none w-14 text-center ml-auto" readOnly value={state.form.day} />
@@ -53,7 +53,11 @@ export const Panel = ({ state, dispatch, month }: { state: state; dispatch: Reac
 
         <div className="flex mt-auto">
           <img src={state.user.photo} alt="" className="rounded-full w-16 my-auto" />
-          <p className="text-xl my-auto mx-2 w-full text-center">{state.user.name}</p>
+          <p className="text-xl my-auto mx-1 flex-1 text-center">{state.user.name}</p>
+          <div className="w-12 flex relative">
+            <p className="absolute bg-red-500 px-2 rounded-full text-white font-semibold bottom-0 -right-2">{state.administartionData.length}</p>
+            <img src={require("../images/warning.png")} alt="" className="w-12 my-auto" onClick={() => dispatch({ type: "administration" })} />
+          </div>
           <img src={require("../images/logout.png")} alt="" className="w-16  ml-auto" onClick={logout} />
         </div>
       </div>
