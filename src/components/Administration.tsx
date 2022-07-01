@@ -6,7 +6,7 @@ export const Administartion = ({ state, dispatch }: { state: state; dispatch: Re
 
   return (
     <div style={{ height: state.height }} className="flex flex-col w-full">
-      <img src={require("../images/close.png")} alt="" className="w-14 ml-auto" onClick={() => dispatch({ type: "administration" })} />
+      <img src={require("../images/close.png")} alt="" className="w-14 ml-auto mr-2 mt-2" onClick={() => dispatch({ type: "administration" })} />
       <h1 className="text-4xl font-semibold">Requests</h1>
       <div className="flex flex-wrap">
         {state.administartionData.map((item) => {

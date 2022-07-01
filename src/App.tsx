@@ -67,18 +67,21 @@ const reducer = (state: state, actions: actions) => {
     case "administration":
       return { ...state, administration: !state.administration };
     case "set-to-calendar":
-        actions.act &&
+      actions.act &&
         setDoc(doc(db, "accepted", actions.item.id.toString()), {
           ...actions.item,
         });
       deleteDoc(doc(db, "waiting-for-accept", actions.item.id.toString()));
-      return { ...state };
-      
+
+      if (state.administartionData.length === 1) {
+        return { ...state, administration: false };
+      } else {
+        return { ...state };
+      }
+
     case "calendar-data":
-      
-      return {...state, calendarData: actions.data, loading: [...state.loading, true]}
-    }
-  
+      return { ...state, calendarData: actions.data, loading: [...state.loading, true] };
+  }
 };
 
 export const App = () => {
@@ -95,15 +98,15 @@ export const App = () => {
       dispatch({ type: "administartion-data", data: arr });
     });
 
-    onSnapshot(collection(db, "accepted"), item=>{
-      let arr: form[] = []
+    onSnapshot(collection(db, "accepted"), (item) => {
+      let arr: form[] = [];
       item.forEach((doc) => arr.push(doc.data() as form));
       dispatch({ type: "calendar-data", data: arr });
-    })
+    });
   }, []);
 
   useEffect(() => (validateLogin ? (localStorage.setItem("user", JSON.stringify(state.user)), navigation("/dashboard")) : (localStorage.removeItem("user"), navigation("/"))), [validateLogin, state.user, navigation]);
-  
+
   return (
     <Routes>
       <Route path="/" element={<SignIn state={state} dispatch={dispatch} validateLogin={validateLogin} />}></Route>
