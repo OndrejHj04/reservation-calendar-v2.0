@@ -14,7 +14,7 @@ export const Dashboard = ({ state, dispatch, validateInput }: { state: state; di
           <img src={require("../images/load.png")} alt="" className="w-60 m-auto" id="rotate" ref={loading} />
         </div>
       ) : (
-        <div style={{ height: state.height, minHeight: state.width > 1024 ? "800px" : "" }} className="flex w-full flex-col lg:flex-row">
+        <div style={{ height: state.width > 1024?state.height:"", minHeight: state.width > 1024 ? "800px" : "" }} className="flex w-full flex-col lg:flex-row">
           {<Calendar dispatch={dispatch} state={state} />}
           {<Panel month={month} state={state} dispatch={dispatch} />}
         </div>
