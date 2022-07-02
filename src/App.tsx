@@ -5,8 +5,9 @@ import { Dashboard } from "./components/Dashboard";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { FourOhFour } from "./support/FourOhFour";
 import { initializeApp } from "firebase/app";
-import { collection, deleteDoc, doc, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getFirestore, onSnapshot, query, setDoc } from "firebase/firestore";
 import { nanoid } from "nanoid";
+import { orderBy } from "cypress/types/lodash";
 const firebaseConfig = {
   apiKey: "AIzaSyCWBAGCwPFPHi_RNYApa8n-mFCt1lprG-4",
   authDomain: "reservation-calendar-3a139.firebaseapp.com",
@@ -15,16 +16,39 @@ const firebaseConfig = {
   messagingSenderId: "5681576630",
   appId: "1:5681576630:web:f6263c44d9233589998417",
 };
+const openHour = 8;
+const closingHour = 19;
+const dayMinutes = (closingHour - openHour)*60
 initializeApp(firebaseConfig);
 const db = getFirestore();
 const validateSubmit = (form: form) => {
   const condition1 = form.day.length && form.month.length && Object.keys(form.inputs).every((item) => form.inputs[(item as "fromHours", "toHours", "fromMinutes", "toMinutes")].length); //each item should have at least some length
   const condition2 = Number(form.inputs.fromHours) > 7 && Number(form.inputs.toHours) > 7 && Number(form.inputs.fromHours) < 19 && Number(form.inputs.toHours) < 19; //hours must be between 8 and 18
-  const condition3 = Number(form.inputs.fromMinutes) > -1 && Number(form.inputs.toMinutes) > -1 && Number(form.inputs.fromMinutes) < 59 && Number(form.inputs.toMinutes) < 59; //seconds must be between 0 and  59
+  const condition3 = Number(form.inputs.fromMinutes) > -1 && Number(form.inputs.toMinutes) > -1 && Number(form.inputs.fromMinutes) < 60 && Number(form.inputs.toMinutes) < 60; //seconds must be between 0 and  59
   const condition4 = (Number(form.inputs.toHours) - Number(form.inputs.fromHours)) * 60 + (Number(form.inputs.toMinutes) - Number(form.inputs.fromMinutes)) >= 30;
 
   return Boolean(condition1 && condition2 && condition3 && condition4);
 };
+const timeColisions = (form:form, state:state) =>{
+  const formBefore = (Number(form.inputs.fromHours)-openHour)*60+Number(form.inputs.fromMinutes)
+  const formAfter = (closingHour-Number(form.inputs.toHours))*60-Number(form.inputs.toMinutes)
+  const formDuration = dayMinutes - formAfter - formBefore 
+
+  return state.calendarData.every(item=>{
+    const itemBefore = (Number(item.inputs.fromHours)-openHour)*60+Number(item.inputs.fromMinutes)
+    const itemAfter = (closingHour-Number(item.inputs.toHours))*60-Number(item.inputs.toMinutes)
+
+    if(item.day === form.day&&item.month === form.month){
+      if(formBefore + formDuration <= itemBefore || formAfter + formDuration <= itemAfter){
+        return true
+      }else{
+        return false
+      }
+    }else{
+      return true
+    }
+  })
+}
 const reducer = (state: state, actions: actions) => {
   switch (actions.type) {
     case "resize":
@@ -51,22 +75,25 @@ const reducer = (state: state, actions: actions) => {
     case "focus":
       return { ...state, focus: actions.id };
     case "submit":
-      if (validateSubmit(state.form)) {
+      //console.log(validateSubmit(state.form), timeColisions(state.form, state))
+      if (validateSubmit(state.form)&&timeColisions(state.form, state)) {
         const id = nanoid();
         setDoc(doc(db, "waiting-for-accept", id), {
           ...state.form,
           id: id,
         });
         return { ...state, form: initial.form, message: "Úspěšně odesláno!" };
-      } else {                    
+      } else {
         return { ...state, message: "Termíny lze rezervovat od 8 do 18 hodin a nejméně na 30 minut." };
       }
+
     case "administartion-data":
       return { ...state, administartionData: actions.data, loading: [...state.loading, true] };
     case "administration":
       return { ...state, administration: !state.administration };
     case "set-to-calendar":
-      actions.act &&
+
+      actions.act && timeColisions(actions.item, state) &&
         setDoc(doc(db, "accepted", actions.item.id.toString()), {
           ...actions.item,
         });
@@ -85,6 +112,7 @@ const reducer = (state: state, actions: actions) => {
 
 export const App = () => {
   const [state, dispatch] = useReducer(reducer, initial);
+
   const validateLogin = Object.keys(state.user).every((item) => state.user[item as "name" | "photo" | "email"]?.length);
   const navigation = useNavigate();
   useEffect(() => {
@@ -96,8 +124,8 @@ export const App = () => {
       item.forEach((doc) => arr.push(doc.data() as form));
       dispatch({ type: "administartion-data", data: arr });
     });
-
-    onSnapshot(collection(db, "accepted"), (item) => {
+    const q = query(collection(db, "accepted"));
+    onSnapshot(q, (item) => {
       let arr: form[] = [];
       item.forEach((doc) => arr.push(doc.data() as form));
       dispatch({ type: "calendar-data", data: arr });

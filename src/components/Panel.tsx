@@ -52,8 +52,8 @@ export const Panel = ({ state, dispatch, month }: { state: state; dispatch: Reac
             </div>
           </div>
 
-          <div className="w-full flex">
-            <button onClick={() => dispatch({ type: "submit" })} className="transition-all hover:scale-105 bg-blue-400 px-2 py-1 mt-1 mx-auto rounded-2xl">
+          <div className="w-full flex lg:my-3 my-0 mt-1">
+            <button onClick={() => dispatch({ type: "submit" })} className="transition-all hover:scale-105 bg-blue-400 px-2 py-1 mx-auto rounded-2xl">
               submit
             </button>
           </div>

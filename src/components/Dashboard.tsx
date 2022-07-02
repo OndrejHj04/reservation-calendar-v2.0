@@ -16,7 +16,7 @@ export const Dashboard = ({ state, dispatch, validateInput }: { state: state; di
         </div>
       ) : (
         <div className="flex flex-row">
-          {!state.administration ? (
+          {state.administration ? (
             <Administartion  state={state} dispatch={dispatch}/>
           ) : (
             <>
