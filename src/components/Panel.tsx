@@ -60,7 +60,6 @@ export const Panel = ({ state, dispatch, month }: { state: state; dispatch: Reac
         {state.message.length > 0 && <p data-cy="message" className="text-red-500" style={{fontSize: "17px", lineHeight: "17px", letterSpacing: "1.3px"}}>{state.message}</p>}
 
         <div className="flex mt-auto flex-col text-lg text-center">
-          <img src={state.user.photo} alt="" className="rounded-full w-16 mx-auto my-2" />
           <p>{state.user.name}</p><hr />
           <div>
             <p className="cursor-pointer" onClick={() => dispatch({ type: "administration" })}>Administration</p>
