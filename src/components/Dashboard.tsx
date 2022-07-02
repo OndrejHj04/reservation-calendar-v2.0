@@ -15,7 +15,7 @@ export const Dashboard = ({ state, dispatch, validateInput }: { state: state; di
           <img src={require("../images/load.png")} alt="" className="w-60 m-auto" id="rotate" ref={loading} />
         </div>
       ) : (
-        <div style={{ height: state.height, minHeight: "560px" }} className="flex flex-row">
+        <div style={{ height: state.height, minHeight: "530px" }} className="flex flex-row">
           {state.administration ? (
             <Administartion  state={state} dispatch={dispatch}/>
           ) : (

@@ -11,11 +11,12 @@ export const Panel = ({ state, dispatch, month }: { state: state; dispatch: Reac
 
   return (
     <div className="flex-1 h-full text-2xl p-2">
-      <div className="sm:w-full h-full  p-1 flex flex-col" id="calendar-container">
-        <h1 className="mx-auto">{month}</h1>
+      <div className="sm:w-full h-full p-1 flex flex-col" id="calendar-container">
         <div className="flex justify-between">
-          <img src={require("../images/right.png")} alt="" className="w-10 rotate-180" onClick={() => dispatch({ type: "change-month", action: "decrease" })} />
-          <img src={require("../images/right.png")} alt="" className="w-10" onClick={() => dispatch({ type: "change-month", action: "increase" })} />
+          <img src={require("../images/next.png")} alt="" className="w-6 h-8 rotate-180" onClick={() => dispatch({ type: "change-month", action: "decrease" })} />
+          <h1 className="mx-auto my-auto">{month}</h1>
+
+          <img src={require("../images/next.png")} alt="" className="w-6 h-8" onClick={() => dispatch({ type: "change-month", action: "increase" })} />
         </div>
 
         <div className=" m-2">
@@ -57,16 +58,24 @@ export const Panel = ({ state, dispatch, month }: { state: state; dispatch: Reac
             </button>
           </div>
         </div>
-        {false && <p data-cy="message" className="text-red-500" style={{fontSize: "17px", lineHeight: "17px", letterSpacing: "1.3px"}}></p>}
+        {false && <p data-cy="message" className="text-red-500" style={{ fontSize: "17px", lineHeight: "17px", letterSpacing: "1.3px" }}></p>}
 
-        <div className="w-full text-red-500" style={{fontSize: "15px", lineHeight: "15px"}}>{state.message}</div>
+        <div className="w-full text-red-500 h-36" style={{ fontSize: "15px", lineHeight: "15px" }}>
+          {state.message}
+        </div>
 
         <div className="flex mt-auto flex-col text-lg text-center">
-          <p>{state.user.name}</p><hr />
+          <p>{state.user.name}</p>
+          <hr />
           <div>
-            <p className="cursor-pointer" onClick={() => dispatch({ type: "administration" })}>Administration</p>
-          </div><hr />
-          <p className="cursor-pointer" onClick={logout}>Logout</p>
+            <p className="cursor-pointer" onClick={() => dispatch({ type: "administration" })}>
+              Administration
+            </p>
+          </div>
+          <hr />
+          <p className="cursor-pointer" onClick={logout}>
+            Logout
+          </p>
         </div>
       </div>
     </div>
