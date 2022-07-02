@@ -10,11 +10,11 @@ export const Panel = ({ state, dispatch, month }: { state: state; dispatch: Reac
   };
 
   return (
-    <div className="flex-1 h-full text-2xl p-2">
-      <div className="sm:w-full h-full p-1 flex flex-col" id="calendar-container">
+    <div className="flex-1 h-full text-2xl p-2" style={{height: "auto", minHeight: state.height}}>
+      <div className="sm:w-full h-full flex flex-col py-1" id="calendar-container">
         <div className="flex justify-between">
           <img src={require("../images/next.png")} alt="" className="w-6 h-8 rotate-180" onClick={() => dispatch({ type: "change-month", action: "decrease" })} />
-          <h1 className="mx-auto my-auto">{month}</h1>
+          <h1 className="mx-auto my-auto text-xl">{month}</h1>
 
           <img src={require("../images/next.png")} alt="" className="w-6 h-8" onClick={() => dispatch({ type: "change-month", action: "increase" })} />
         </div>
@@ -60,11 +60,11 @@ export const Panel = ({ state, dispatch, month }: { state: state; dispatch: Reac
         </div>
         {false && <p data-cy="message" className="text-red-500" style={{ fontSize: "17px", lineHeight: "17px", letterSpacing: "1.3px" }}></p>}
 
-        <div className="w-full text-red-500 h-36" style={{ fontSize: "15px", lineHeight: "15px" }}>
+        <div className="w-full text-red-500 p-1 h-20" style={{ fontSize: "15px", lineHeight: "15px" }}>
           {state.message}
         </div>
 
-        <div className="flex mt-auto flex-col text-lg text-center">
+        <div className="flex mt-auto flex-col text-lg text-center p-1">
           <p>{state.user.name}</p>
           <hr />
           <div>

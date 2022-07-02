@@ -6,7 +6,7 @@ export const Calendar = ({ state, dispatch }: { state: state,  dispatch: React.D
   };
 
   return (
-    <div className="lg:w-11/12 w-full lg:h-full min-h-0 h-full rounded-full">
+    <div className="lg:w-11/12 w-full lg:h-full min-h-0 h-full rounded-full" style={{height: state.height, minHeight: "540px"}}>
       <div className="w-full h-full flex flex-col lg:grid grid-rows-5 grid-cols-7 overflow-scroll lg:overflow-hidden bg-slate-300 gap-1">
         {[...Array(new Date(new Date().getFullYear() - 1, state.monthCount + 1, 0).getDate())].map((undef, i) => {
           return (

@@ -45,7 +45,6 @@ const reducer = (state: state, actions: actions) => {
 
       return { ...state, monthCount: validMonth() };
     case "auto-input":
-      state.width < 1024 && window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
       return { ...state, form: { ...state.form, name: state.user.name, day: actions.day.toString(), month: new Date(new Date().getFullYear(), actions.month).toLocaleDateString("cs", { month: "long" }) }, focus: initial.focus };
     case "input":
       return { ...state, form: { ...state.form, inputs: { ...state.form.inputs, [actions.name]: actions.value } } };
