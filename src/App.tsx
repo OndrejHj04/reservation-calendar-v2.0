@@ -7,7 +7,6 @@ import { FourOhFour } from "./support/FourOhFour";
 import { initializeApp } from "firebase/app";
 import { collection, deleteDoc, doc, getFirestore, onSnapshot, query, setDoc } from "firebase/firestore";
 import { nanoid } from "nanoid";
-import { orderBy } from "cypress/types/lodash";
 const firebaseConfig = {
   apiKey: "AIzaSyCWBAGCwPFPHi_RNYApa8n-mFCt1lprG-4",
   authDomain: "reservation-calendar-3a139.firebaseapp.com",
