@@ -6,8 +6,8 @@ export const Calendar = ({ state, dispatch }: { state: state,  dispatch: React.D
   };
 
   return (
-    <div className="lg:w-11/12 w-full lg:h-full min-h-0 h-full lg:p-3 p-1">
-      <div className="w-full h-full flex flex-col lg:grid grid-rows-5 grid-cols-7 overflow-scroll lg:overflow-hidden bg-slate-300 gap-1" id="calendar-container">
+    <div className="lg:w-11/12 w-full lg:h-full min-h-0 h-full rounded-full">
+      <div className="w-full h-full flex flex-col lg:grid grid-rows-5 grid-cols-7 overflow-scroll lg:overflow-hidden bg-slate-300 gap-1">
         {[...Array(new Date(new Date().getFullYear() - 1, state.monthCount + 1, 0).getDate())].map((undef, i) => {
           return (
             <div key={i + 1} onClick={()=>dispatch({type: "auto-input", day: i+1, month: state.monthCount})} style={i === 0 ? columnStart : {}} className={`${i + 1 === new Date().getDate() && new Date().getMonth() + 12 === state.monthCount && "border-b-8 border-red-500"} bg-white`}>
