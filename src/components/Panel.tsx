@@ -60,7 +60,7 @@ export const Panel = ({ state, dispatch, month }: { state: state; dispatch: Reac
         </div>
         {false && <p data-cy="message" className="text-red-500" style={{ fontSize: "17px", lineHeight: "17px", letterSpacing: "1.3px" }}></p>}
 
-        <div className="w-full text-red-500 " style={{fontSize: "13px", lineHeight: "16px"}}>
+        <div className="w-full text-red-500 " style={{fontSize: state.height > 600?"16px":"13px", lineHeight: "16px"}}>
           {state.message}
         </div>
 
