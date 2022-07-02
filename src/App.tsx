@@ -59,8 +59,8 @@ const reducer = (state: state, actions: actions) => {
           id: id,
         });
         return { ...state, form: initial.form, message: "Úspěšně odesláno!" };
-      } else {
-        return { ...state, message: "Termíny lze rezervovat od 8 do 18 hodin včetně a nejméně na 30 minut." };
+      } else {                    
+        return { ...state, message: "Termíny lze rezervovat od 8 do 18 hodin a nejméně na 30 minut." };
       }
     case "administartion-data":
       return { ...state, administartionData: actions.data, loading: [...state.loading, true] };

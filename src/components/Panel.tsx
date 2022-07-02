@@ -10,40 +10,40 @@ export const Panel = ({ state, dispatch, month }: { state: state; dispatch: Reac
   };
 
   return (
-    <div className="flex-1 h-full p-1 lg:p-10 lg:pl-0 sm:text-2xl text-lg">
-      <div className="w-full h-full rounded-3xl p-2 flex flex-col" id="calendar-container">
-        <div className="flex flex-wrap">
-          <img src={require("../images/right.png")} alt="" className="sm:w-10 w-8 rotate-180" onClick={() => dispatch({ type: "change-month", action: "decrease" })} />
-          <h1 className="m-auto ">{month}</h1>
-          <img src={require("../images/right.png")} alt="" className="sm:w-10 w-8" onClick={() => dispatch({ type: "change-month", action: "increase" })} />
+    <div className="flex-1 h-full p-1 lg:p-3 lg:pl-0 text-2xl ">
+      <div className="sm:w-full h-full  p-2 flex flex-col" id="calendar-container">
+        <h1 className="mx-auto">{month}</h1>
+        <div className="flex justify-between">
+          <img src={require("../images/right.png")} alt="" className="w-10 rotate-180" onClick={() => dispatch({ type: "change-month", action: "decrease" })} />
+          <img src={require("../images/right.png")} alt="" className="w-10" onClick={() => dispatch({ type: "change-month", action: "increase" })} />
         </div>
 
         <div className=" m-2">
           <div className="flex justify-between flex-col">
-            <div className="flex">
+            <div className="">
               <label htmlFor="">day:</label>
-              <input type="text" className="border-b-2 border-black outline-none w-14 text-center" readOnly value={state.form.day} />
+              <input type="text" className="border-b-2 border-black outline-none w-full text-center" readOnly value={state.form.day} />
             </div>
 
-            <div className="flex">
+            <div className="">
               <label htmlFor="">month:</label>
-              <input type="text" className="border-b-2 border-black outline-none w-28 text-center" readOnly value={state.form.month} />
+              <input type="text" className="border-b-2 border-black outline-none w-full text-center" readOnly value={state.form.month} />
             </div>
           </div>
 
-          <div className="flex justify-between flex-wrap ">
-            <div className="flex">
+          <div className="flex justify-between flex-wrap">
+            <div className="">
               <label htmlFor="">from:</label>
-              <div className="">
+              <div className="flex">
                 <input type="number" onClick={() => dispatch({ type: "focus", id: 0 })} className="border-b-2 border-black outline-none w-14 text-center" name="fromHours" onChange={(e) => dispatch({ type: "input", name: e.target.name, value: e.target.value })} value={state.form.inputs.fromHours} />
                 :
                 <input type="number" onClick={() => dispatch({ type: "focus", id: 1 })} className="border-b-2 border-black outline-none w-14 text-center" name="fromMinutes" onChange={(e) => dispatch({ type: "input", name: e.target.name, value: e.target.value })} value={state.form.inputs.fromMinutes} />
               </div>
             </div>
 
-            <div className="flex">
+            <div className="">
               <label htmlFor="">to:</label>
-              <div className="">
+              <div className="flex">
                 <input type="number" onClick={() => dispatch({ type: "focus", id: 2 })} className="border-b-2 border-black outline-none w-14 text-center" name="toHours" onChange={(e) => dispatch({ type: "input", name: e.target.name, value: e.target.value })} value={state.form.inputs.toHours} />
                 :
                 <input type="number" onClick={() => dispatch({ type: "focus", id: 3 })} className="border-b-2 border-black outline-none w-14 text-center" name="toMinutes" onChange={(e) => dispatch({ type: "input", name: e.target.name, value: e.target.value })} value={state.form.inputs.toMinutes} />
@@ -51,20 +51,22 @@ export const Panel = ({ state, dispatch, month }: { state: state; dispatch: Reac
             </div>
           </div>
 
-          <button onClick={() => dispatch({ type: "submit" })}>submit</button>
-        </div>
-        {!!state.message.length && <p data-cy="message">{state.message}</p>}
-        <div className="flex-1 overflow-y-scroll my-2"></div>
-
-        <div className="flex mt-auto">
-          <img src={state.user.photo} alt="" className="rounded-full w-16 my-auto" />
-          <div className="w-16 flex relative">
-            <p className="absolute bg-red-500 px-2 rounded-full text-white font-semibold bottom-0 -right-2">{state.administartionData.length}</p>
-            <img src={require("../images/warning.png")} alt="" className="w-12 my-auto" onClick={() => dispatch({ type: "administration" })} />
+          <div className="w-full flex">
+            <button onClick={() => dispatch({ type: "submit" })} className="transition-all hover:scale-105 bg-blue-400 px-2 py-1 mt-2 mx-auto rounded-2xl">
+              submit
+            </button>
           </div>
-          <img src={require("../images/logout.png")} alt="" className="w-16" onClick={logout} />
         </div>
-        <p className=" mx-1">{state.user.name}</p>
+        {state.message.length > 0 && <p data-cy="message" className="text-red-500" style={{fontSize: "17px", lineHeight: "17px", letterSpacing: "1.3px"}}>{state.message}</p>}
+
+        <div className="flex mt-auto flex-col text-lg text-center">
+          <img src={state.user.photo} alt="" className="rounded-full w-16 mx-auto my-2" />
+          <p>{state.user.name}</p><hr />
+          <div>
+            <p className="cursor-pointer" onClick={() => dispatch({ type: "administration" })}>Administration</p>
+          </div><hr />
+          <p className="cursor-pointer" onClick={logout}>Logout</p>
+        </div>
       </div>
     </div>
   );
