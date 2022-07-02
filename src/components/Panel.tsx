@@ -10,7 +10,7 @@ export const Panel = ({ state, dispatch, month }: { state: state; dispatch: Reac
   };
 
   return (
-    <div className="flex-1 h-full text-2xl p-2" style={{height: "auto", minHeight: state.height}}>
+    <div className="flex-1 h-full text-2xl p-2" style={{ height: "auto", minHeight: state.height }}>
       <div className="sm:w-full h-full flex flex-col py-1" id="calendar-container">
         <div className="flex justify-between">
           <img src={require("../images/next.png")} alt="" className="w-6 h-8 rotate-180" onClick={() => dispatch({ type: "change-month", action: "decrease" })} />
@@ -60,18 +60,18 @@ export const Panel = ({ state, dispatch, month }: { state: state; dispatch: Reac
         </div>
         {false && <p data-cy="message" className="text-red-500" style={{ fontSize: "17px", lineHeight: "17px", letterSpacing: "1.3px" }}></p>}
 
-        <div className="w-full text-red-500 " style={{fontSize: state.height > 600?"16px":"13px", lineHeight: "16px"}}>
+        <div className="w-full text-red-500 " style={{ fontSize: state.height > 600 ? "16px" : "13px", lineHeight: "16px" }}>
           {state.message}
         </div>
 
         <div className="flex mt-auto flex-col text-lg text-center p-1">
           <p>{state.user.name}</p>
           <hr />
-          <div>
-            <p className="cursor-pointer" onClick={() => dispatch({ type: "administration" })}>
-              Administration
-            </p>
-          </div>
+
+          <p className={`cursor-pointer ${state.administartionData.length?"bg-red-500 text-white font-semibold":""}`} onClick={() => dispatch({ type: "administration" })}>
+            Administration
+          </p>
+
           <hr />
           <p className="cursor-pointer" onClick={logout}>
             Logout
