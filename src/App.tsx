@@ -17,7 +17,7 @@ const firebaseConfig = {
 };
 const openHour = 8;
 const closingHour = 19;
-const dayMinutes = (closingHour - openHour)*60
+const dayMinutes = (closingHour - openHour) * 60;
 initializeApp(firebaseConfig);
 export const db = getFirestore();
 const validateSubmit = (form: form) => {
@@ -28,26 +28,26 @@ const validateSubmit = (form: form) => {
 
   return Boolean(condition1 && condition2 && condition3 && condition4);
 };
-const timeColisions = (form:form, state:state) =>{
-  const formBefore = (Number(form.inputs.fromHours)-openHour)*60+Number(form.inputs.fromMinutes)
-  const formAfter = (closingHour-Number(form.inputs.toHours))*60-Number(form.inputs.toMinutes)
-  const formDuration = dayMinutes - formAfter - formBefore 
+const timeColisions = (form: form, state: state) => {
+  const formBefore = (Number(form.inputs.fromHours) - openHour) * 60 + Number(form.inputs.fromMinutes);
+  const formAfter = (closingHour - Number(form.inputs.toHours)) * 60 - Number(form.inputs.toMinutes);
+  const formDuration = dayMinutes - formAfter - formBefore;
 
-  return state.calendarData.every(item=>{
-    const itemBefore = (Number(item.inputs.fromHours)-openHour)*60+Number(item.inputs.fromMinutes)
-    const itemAfter = (closingHour-Number(item.inputs.toHours))*60-Number(item.inputs.toMinutes)
+  return state.calendarData.every((item) => {
+    const itemBefore = (Number(item.inputs.fromHours) - openHour) * 60 + Number(item.inputs.fromMinutes);
+    const itemAfter = (closingHour - Number(item.inputs.toHours)) * 60 - Number(item.inputs.toMinutes);
 
-    if(item.day === form.day&&item.month === form.month){
-      if(formBefore + formDuration <= itemBefore || formAfter + formDuration <= itemAfter){
-        return true
-      }else{
-        return false
+    if (item.day === form.day && item.month === form.month) {
+      if (formBefore + formDuration <= itemBefore || formAfter + formDuration <= itemAfter) {
+        return true;
+      } else {
+        return false;
       }
-    }else{
-      return true
+    } else {
+      return true;
     }
-  })
-}
+  });
+};
 const reducer = (state: state, actions: actions) => {
   switch (actions.type) {
     case "resize":
@@ -74,7 +74,7 @@ const reducer = (state: state, actions: actions) => {
     case "focus":
       return { ...state, focus: actions.id };
     case "submit":
-      if (actions.checkbox.current.checked&&validateSubmit(state.form)&&timeColisions(state.form, state)) {
+      if (actions.checkbox.current.checked && validateSubmit(state.form) && timeColisions(state.form, state)) {
         const id = nanoid();
         setDoc(doc(db, "waiting-for-accept", id), {
           ...state.form,
@@ -90,8 +90,8 @@ const reducer = (state: state, actions: actions) => {
     case "administration":
       return { ...state, administration: !state.administration, message: "" };
     case "set-to-calendar":
-
-      actions.act && timeColisions(actions.item, state) &&
+      actions.act &&
+        timeColisions(actions.item, state) &&
         setDoc(doc(db, "accepted", actions.item.id.toString()), {
           ...actions.item,
         });
@@ -107,10 +107,7 @@ const reducer = (state: state, actions: actions) => {
       return { ...state, calendarData: actions.data, loading: [...state.loading, true] };
 
     case "block-mode":
-      return {...state, blockMode: !state.blockMode, administration: false}
-    case "semiblocked":
-      const val = state.semiblocked.every(item=>JSON.stringify(item) !== JSON.stringify({day: actions.date.day, month: actions.date.month}))
-      return {...state, semiblocked: val?[...state.semiblocked,  {day: actions.date.day, month: actions.date.month}]: state.semiblocked}
+      return {...state, administration: false, blockMode: !state.blockMode}
   }
 };
 
@@ -136,19 +133,14 @@ export const App = () => {
       dispatch({ type: "calendar-data", data: arr });
     });
 
-    // onSnapshot(collection(db, "blocked-days"), item=>{
-    //   let arr: {day: number, month: string, id: number}[] = []
-    //   item.forEach(doc=>arr.push(doc.data() as {day: number, month: string, id: number}))
-    //   dispatch({type: "blocked-data", data: arr})
-    // })
   }, []);
 
   useEffect(() => (validateLogin ? (localStorage.setItem("user", JSON.stringify(state.user)), navigation("/dashboard")) : (localStorage.removeItem("user"), navigation("/"))), [validateLogin, state.user, navigation]);
-  console.log(state.semiblocked)
+
   return (
     <Routes>
       <Route path="/" element={<SignIn state={state} dispatch={dispatch} validateLogin={validateLogin} />}></Route>
-      <Route path="/dashboard" element={<Dashboard state={state} dispatch={dispatch} checkbox={checkbox}/>}></Route>
+      <Route path="/dashboard" element={<Dashboard state={state} dispatch={dispatch} checkbox={checkbox} />}></Route>
       <Route path="*" element={<FourOhFour />} />
     </Routes>
   );

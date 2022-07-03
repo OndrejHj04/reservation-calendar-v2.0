@@ -90,12 +90,12 @@ export const Panel = ({ state, dispatch, month, checkbox }: { state: state; disp
         ) : (
           <>
             <div className="p-1">
-              <p className="text-xl text-center">Zablokujte termíny, kdy nepůjde udělat rezervaci a rezervace na daný den budou zrušeny.</p>
+              <p className="text-xl text-center">Vyberte termíny které nebude možné rezervovat</p>
 
               <div className="text-lg text-center my-3">
-                <p className="cursor-pointer" onClick={()=>dispatch({type: "block-mode"})}>uložit</p>
+                <p className="cursor-pointer" onClick={()=>dispatch({type: "block-mode", act: true})}>uložit</p>
                 <hr />
-                <p className="cursor-pointer" onClick={()=>dispatch({type: "block-mode"})}>zrušit</p>
+                <p className="cursor-pointer" onClick={()=>dispatch({type: "block-mode", act: false})}>zrušit</p>
               </div>
             </div>
           </>
