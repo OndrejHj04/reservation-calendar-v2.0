@@ -19,7 +19,7 @@ const openHour = 8;
 const closingHour = 19;
 const dayMinutes = (closingHour - openHour)*60
 initializeApp(firebaseConfig);
-const db = getFirestore();
+export const db = getFirestore();
 const validateSubmit = (form: form) => {
   const condition1 = form.day.length && form.month.length && Object.keys(form.inputs).every((item) => form.inputs[(item as "fromHours", "toHours", "fromMinutes", "toMinutes")].length); //each item should have at least some length
   const condition2 = Number(form.inputs.fromHours) > 7 && Number(form.inputs.toHours) > 7 && Number(form.inputs.fromHours) < 19 && Number(form.inputs.toHours) < 19; //hours must be between 8 and 18
@@ -105,13 +105,19 @@ const reducer = (state: state, actions: actions) => {
 
     case "calendar-data":
       return { ...state, calendarData: actions.data, loading: [...state.loading, true] };
+
+    case "block-mode":
+      return {...state, blockMode: !state.blockMode, administration: false}
+    case "semiblocked":
+      const val = state.semiblocked.every(item=>JSON.stringify(item) !== JSON.stringify({day: actions.date.day, month: actions.date.month}))
+      return {...state, semiblocked: val?[...state.semiblocked,  {day: actions.date.day, month: actions.date.month}]: state.semiblocked}
   }
 };
 
 export const App = () => {
   const [state, dispatch] = useReducer(reducer, initial);
   const checkbox = useRef<HTMLInputElement>(null!)
-
+  
   const validateLogin = Object.keys(state.user).every((item) => state.user[item as "name" | "photo" | "email"]?.length);
   const navigation = useNavigate();
   useEffect(() => {
@@ -129,10 +135,16 @@ export const App = () => {
       item.forEach((doc) => arr.push(doc.data() as form));
       dispatch({ type: "calendar-data", data: arr });
     });
+
+    // onSnapshot(collection(db, "blocked-days"), item=>{
+    //   let arr: {day: number, month: string, id: number}[] = []
+    //   item.forEach(doc=>arr.push(doc.data() as {day: number, month: string, id: number}))
+    //   dispatch({type: "blocked-data", data: arr})
+    // })
   }, []);
 
   useEffect(() => (validateLogin ? (localStorage.setItem("user", JSON.stringify(state.user)), navigation("/dashboard")) : (localStorage.removeItem("user"), navigation("/"))), [validateLogin, state.user, navigation]);
-
+  console.log(state.semiblocked)
   return (
     <Routes>
       <Route path="/" element={<SignIn state={state} dispatch={dispatch} validateLogin={validateLogin} />}></Route>
