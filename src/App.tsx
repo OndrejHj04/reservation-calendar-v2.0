@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import { SignIn } from "./components/SignIn";
 import { actions, form, initial, state } from "./support/types";
 import { Dashboard } from "./components/Dashboard";
@@ -68,14 +68,13 @@ const reducer = (state: state, actions: actions) => {
 
       return { ...state, monthCount: validMonth() };
     case "auto-input":
-      return { ...state, form: { ...state.form, name: state.user.name, day: actions.day.toString(), month: new Date(new Date().getFullYear(), actions.month).toLocaleDateString("cs", { month: "long" }) }, focus: initial.focus };
+      return { ...state, message: "", form: { ...state.form, name: state.user.name, day: actions.day.toString(), month: new Date(new Date().getFullYear(), actions.month).toLocaleDateString("cs", { month: "long" }) }, focus: initial.focus };
     case "input":
-      return { ...state, form: { ...state.form, inputs: { ...state.form.inputs, [actions.name]: actions.value } } };
+      return { ...state, form: { ...state.form, inputs: { ...state.form.inputs, [actions.name]: actions.value } }, message: "" };
     case "focus":
       return { ...state, focus: actions.id };
     case "submit":
-      //console.log(validateSubmit(state.form), timeColisions(state.form, state))
-      if (validateSubmit(state.form)&&timeColisions(state.form, state)) {
+      if (actions.checkbox.current.checked&&validateSubmit(state.form)&&timeColisions(state.form, state)) {
         const id = nanoid();
         setDoc(doc(db, "waiting-for-accept", id), {
           ...state.form,
@@ -89,7 +88,7 @@ const reducer = (state: state, actions: actions) => {
     case "administartion-data":
       return { ...state, administartionData: actions.data, loading: [...state.loading, true] };
     case "administration":
-      return { ...state, administration: !state.administration };
+      return { ...state, administration: !state.administration, message: "" };
     case "set-to-calendar":
 
       actions.act && timeColisions(actions.item, state) &&
@@ -111,6 +110,7 @@ const reducer = (state: state, actions: actions) => {
 
 export const App = () => {
   const [state, dispatch] = useReducer(reducer, initial);
+  const checkbox = useRef<HTMLInputElement>(null!)
 
   const validateLogin = Object.keys(state.user).every((item) => state.user[item as "name" | "photo" | "email"]?.length);
   const navigation = useNavigate();
@@ -136,7 +136,7 @@ export const App = () => {
   return (
     <Routes>
       <Route path="/" element={<SignIn state={state} dispatch={dispatch} validateLogin={validateLogin} />}></Route>
-      <Route path="/dashboard" element={<Dashboard state={state} dispatch={dispatch} validateInput={validateLogin} />}></Route>
+      <Route path="/dashboard" element={<Dashboard state={state} dispatch={dispatch} checkbox={checkbox}/>}></Route>
       <Route path="*" element={<FourOhFour />} />
     </Routes>
   );

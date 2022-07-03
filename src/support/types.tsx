@@ -41,6 +41,7 @@ type focus = {
 
 type submit = {
   type: "submit";
+  checkbox: React.MutableRefObject<HTMLInputElement>
 };
 
 type administartionData = {

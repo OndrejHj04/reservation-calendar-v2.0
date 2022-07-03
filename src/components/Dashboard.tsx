@@ -4,7 +4,7 @@ import { actions } from "../support/types";
 import { Calendar } from "./Calendar";
 import { Panel } from "./Panel";
 import { Administartion } from "./Administration";
-export const Dashboard = ({ state, dispatch, validateInput }: { state: state; dispatch: React.Dispatch<actions>; validateInput: boolean }) => {
+export const Dashboard = ({ state, dispatch, checkbox }: { state: state; dispatch: React.Dispatch<actions>; checkbox: React.MutableRefObject<HTMLInputElement> }) => {
   const loading = useRef<HTMLImageElement>(null);
   const month = new Date(new Date().getFullYear(), state.monthCount).toLocaleDateString("cs", { month: "long" });
 
@@ -21,7 +21,7 @@ export const Dashboard = ({ state, dispatch, validateInput }: { state: state; di
           ) : (
             <>
               <Calendar dispatch={dispatch} state={state} />
-              <Panel month={month} state={state} dispatch={dispatch} />
+              <Panel month={month} state={state} dispatch={dispatch} checkbox={checkbox}/>
             </>
           )}
         </div>

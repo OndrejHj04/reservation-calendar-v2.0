@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { actions, state } from "../support/types";
 
-export const Panel = ({ state, dispatch, month }: { state: state; dispatch: React.Dispatch<actions>; month: string }) => {
+export const Panel = ({ state, dispatch, month, checkbox }: { state: state; dispatch: React.Dispatch<actions>; month: string, checkbox: React.MutableRefObject<HTMLInputElement> }) => {
   const navigate = useNavigate();
 
   const logout = () => {
@@ -52,14 +52,14 @@ export const Panel = ({ state, dispatch, month }: { state: state; dispatch: Reac
             </div>
           </div>
           <div className="flex my-1">
-            <p style={{fontSize: "16px", lineHeight: "18px"}}>
+            <label htmlFor="checkbox" style={{fontSize: "16px", lineHeight: "18px"}} className="cursor-pointer">
               Souhlasím s podmínkami
-            </p>
-            <input type="checkbox" className="my-auto m-3" />
+            </label>
+            <input id="checkbox" type="checkbox" className="my-auto m-3" ref={checkbox}/>
           </div>
 
           <div className="w-full flex lg:my-3 my-0 mt-1">
-            <button onClick={() => dispatch({ type: "submit" })} className="transition-all hover:scale-105 bg-blue-400 px-2 py-1 mx-auto rounded-2xl">
+            <button onClick={() => dispatch({ type: "submit", checkbox: checkbox })} className="transition-all hover:scale-105 bg-blue-400 px-2 py-1 mx-auto rounded-2xl">
               submit
             </button>
           </div>
