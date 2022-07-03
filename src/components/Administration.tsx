@@ -36,6 +36,9 @@ export const Administartion = ({ state, dispatch }: { state: state; dispatch: Re
           );
         })}
       </div>
+
+      <h1 className="text-4xl font-semibold">Blokované termíny</h1>
+
     </div>
   );
 };

@@ -22,19 +22,19 @@ export const Panel = ({ state, dispatch, month }: { state: state; dispatch: Reac
         <div className=" m-2">
           <div className="flex justify-between flex-col">
             <div className="">
-              <label htmlFor="">day:</label>
+              <label htmlFor="">den:</label>
               <input type="text" className="border-b-2 border-black outline-none w-full text-center" readOnly value={state.form.day} />
             </div>
 
             <div className="">
-              <label htmlFor="">month:</label>
+              <label htmlFor="">měsíc:</label>
               <input type="text" className="border-b-2 border-black outline-none w-full text-center" readOnly value={state.form.month} />
             </div>
           </div>
 
           <div className="flex justify-between flex-wrap">
             <div className="">
-              <label htmlFor="">from:</label>
+              <label htmlFor="">od:</label>
               <div className="flex">
                 <input type="number" onClick={() => dispatch({ type: "focus", id: 0 })} className="border-b-2 border-black outline-none w-14 text-center" name="fromHours" onChange={(e) => dispatch({ type: "input", name: e.target.name, value: e.target.value })} value={state.form.inputs.fromHours} />
                 :
@@ -43,13 +43,19 @@ export const Panel = ({ state, dispatch, month }: { state: state; dispatch: Reac
             </div>
 
             <div className="">
-              <label htmlFor="">to:</label>
+              <label htmlFor="">do:</label>
               <div className="flex">
                 <input type="number" onClick={() => dispatch({ type: "focus", id: 2 })} className="border-b-2 border-black outline-none w-14 text-center" name="toHours" onChange={(e) => dispatch({ type: "input", name: e.target.name, value: e.target.value })} value={state.form.inputs.toHours} />
                 :
                 <input type="number" onClick={() => dispatch({ type: "focus", id: 3 })} className="border-b-2 border-black outline-none w-14 text-center" name="toMinutes" onChange={(e) => dispatch({ type: "input", name: e.target.name, value: e.target.value })} value={state.form.inputs.toMinutes} />
               </div>
             </div>
+          </div>
+          <div className="flex my-1">
+            <p style={{fontSize: "16px", lineHeight: "18px"}}>
+              Souhlasím s podmínkami
+            </p>
+            <input type="checkbox" className="my-auto m-3" />
           </div>
 
           <div className="w-full flex lg:my-3 my-0 mt-1">
@@ -58,6 +64,7 @@ export const Panel = ({ state, dispatch, month }: { state: state; dispatch: Reac
             </button>
           </div>
         </div>
+
         {false && <p data-cy="message" className="text-red-500" style={{ fontSize: "17px", lineHeight: "17px", letterSpacing: "1.3px" }}></p>}
 
         <div className="w-full text-red-500 " style={{ fontSize: state.height > 600 ? "16px" : "13px", lineHeight: "16px" }}>
@@ -68,13 +75,13 @@ export const Panel = ({ state, dispatch, month }: { state: state; dispatch: Reac
           <p>{state.user.name}</p>
           <hr />
 
-          <p className={`cursor-pointer ${state.administartionData.length?"bg-red-500 text-white font-semibold":""}`} onClick={() => dispatch({ type: "administration" })}>
-            Administration
+          <p className={`cursor-pointer ${state.administartionData.length ? "bg-red-500 text-white font-semibold" : ""}`} onClick={() => dispatch({ type: "administration" })}>
+            Administrace
           </p>
 
           <hr />
           <p className="cursor-pointer" onClick={logout}>
-            Logout
+            Odhlásit se
           </p>
         </div>
       </div>
