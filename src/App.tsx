@@ -165,7 +165,7 @@ export const App = () => {
         Number(calendar.day) === block.day && calendar.month === new Date(new Date().getFullYear(), block.month).toLocaleDateString("cs", { month: "long" }) && deleteDoc(doc(db, "accepted", calendar.id.toString()));
       });
     });
-  }, [state.blocked]);
+  }, [state.blocked, state.calendarData]);
 
   useEffect(() => (validateLogin ? (localStorage.setItem("user", JSON.stringify(state.user)), navigation("/dashboard")) : (localStorage.removeItem("user"), navigation("/"))), [validateLogin, state.user, navigation]);
 

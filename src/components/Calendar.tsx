@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { actions, state } from "../support/types";
 
 export const Calendar = ({ state, dispatch }: { state: state; dispatch: React.Dispatch<actions> }) => {
