@@ -25,8 +25,8 @@ const validateSubmit = (form: form) => {
   const condition2 = Number(form.inputs.fromHours) > 7 && Number(form.inputs.toHours) > 7 && Number(form.inputs.fromHours) < 19 && Number(form.inputs.toHours) < 19; //hours must be between 8 and 18
   const condition3 = Number(form.inputs.fromMinutes) > -1 && Number(form.inputs.toMinutes) > -1 && Number(form.inputs.fromMinutes) < 60 && Number(form.inputs.toMinutes) < 60; //seconds must be between 0 and  59
   const condition4 = (Number(form.inputs.toHours) - Number(form.inputs.fromHours)) * 60 + (Number(form.inputs.toMinutes) - Number(form.inputs.fromMinutes)) >= 30;
-
-  return Boolean(condition1 && condition2 && condition3 && condition4);
+  const condition5 = form.inputs.fromMinutes.length > 1 && form.inputs.toMinutes.length > 1;
+  return Boolean(condition1 && condition2 && condition3 && condition4 && condition5);
 };
 const timeColisions = (form: form, state: state) => {
   const formBefore = (Number(form.inputs.fromHours) - openHour) * 60 + Number(form.inputs.fromMinutes);
@@ -97,18 +97,13 @@ const reducer = (state: state, actions: actions) => {
         });
       deleteDoc(doc(db, "waiting-for-accept", actions.item.id.toString()));
 
-      if (state.administartionData.length === 1) {
-        return { ...state, administration: false };
-      } else {
-        return { ...state };
-      }
-
+      return state;
     case "calendar-data":
       return { ...state, calendarData: actions.data, loading: [...state.loading, true] };
 
     case "block-mode":
       actions.act &&
-        state.semiblocked.map((item) => {
+        state.semiblocked.forEach((item) => {
           const id = nanoid();
           setDoc(doc(db, "blocked", id), {
             ...item,
@@ -130,7 +125,7 @@ const reducer = (state: state, actions: actions) => {
 export const App = () => {
   const [state, dispatch] = useReducer(reducer, initial);
   const checkbox = useRef<HTMLInputElement>(null!);
-
+  
   const validateLogin = Object.keys(state.user).every((item) => state.user[item as "name" | "photo" | "email"]?.length);
   const navigation = useNavigate();
   useEffect(() => {
@@ -164,12 +159,16 @@ export const App = () => {
     });
   }, []);
 
-  useEffect(()=>{
-
-  },[state.blocked])
+  useEffect(() => {
+    state.calendarData.forEach((calendar) => {
+      state.blocked.forEach((block) => {
+        Number(calendar.day) === block.day && calendar.month === new Date(new Date().getFullYear(), block.month).toLocaleDateString("cs", { month: "long" }) && deleteDoc(doc(db, "accepted", calendar.id.toString()));
+      });
+    });
+  }, [state.blocked]);
 
   useEffect(() => (validateLogin ? (localStorage.setItem("user", JSON.stringify(state.user)), navigation("/dashboard")) : (localStorage.removeItem("user"), navigation("/"))), [validateLogin, state.user, navigation]);
-  console.log(state.semiblocked, state.blocked);
+
   return (
     <Routes>
       <Route path="/" element={<SignIn state={state} dispatch={dispatch} validateLogin={validateLogin} />}></Route>

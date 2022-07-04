@@ -1,6 +1,6 @@
 export type form = { day: string; month: string; name: string, id:number, inputs: { fromHours: string; fromMinutes: string; toHours: string; toMinutes: string } };
 
-export const initial = { blocked: [], semiblocked: [], blockMode: true, calendarData: [], administration: false, administartionData: [], message: "", focus: 0, form: { id: 0, day: "", month: "", name: "", inputs: { fromHours: "", fromMinutes: "", toHours: "", toMinutes: "" } }, monthCount: new Date().getMonth() + 12, loading: [], height: window.innerHeight, width: window.innerWidth, sign: true, user: { email: "", photo: "", name: "" } };
+export const initial = { blocked: [], semiblocked: [], blockMode: false, calendarData: [], administration: false, administartionData: [], message: "", focus: 0, form: { id: 0, day: "", month: "", name: "", inputs: { fromHours: "", fromMinutes: "", toHours: "", toMinutes: "" } }, monthCount: new Date().getMonth() + 12, loading: [], height: window.innerHeight, width: window.innerWidth, sign: true, user: { email: "", photo: "", name: "" } };
 export type state = { blocked: {day: number, month: number, id:string}[], semiblocked: {day: number, month: number}[], blockMode: boolean, calendarData: form[], administration:boolean, administartionData: form[], message: string; focus: number; form: form; monthCount: number; loading: boolean[]; height: number; width: number; sign: boolean; user: { email: string; photo: string; name: string } };
 type resize = {
   type: "resize";
@@ -71,7 +71,7 @@ type blockMode = {
 
 type semiblocked = {
   type: "semiblocked",
-  day: number
+  day: number,
 }
 
 type setBlocked = {
