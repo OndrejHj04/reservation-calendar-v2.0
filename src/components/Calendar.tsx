@@ -1,17 +1,39 @@
+import { useEffect } from "react";
 import { actions, state } from "../support/types";
 
 export const Calendar = ({ state, dispatch }: { state: state; dispatch: React.Dispatch<actions> }) => {
-  const columnStart = new Date(new Date().getFullYear() - 1, state.monthCount, 1).getDay().toString() === "0" ? "7" : new Date(new Date().getFullYear() - 1, state.monthCount, 1).getDay().toString()
-  
+  const columnStart = new Date(new Date().getFullYear() - 1, state.monthCount, 1).getDay().toString() === "0" ? "7" : new Date(new Date().getFullYear() - 1, state.monthCount, 1).getDay().toString();
 
+  useEffect(() => {
+    state.semiblocked.map((item) => {
+      if (item.month === state.monthCount) {
+        const element = document.getElementById(`${item.day}`);
+        element?.classList.add("border-4");
+      }
+    });
 
-  
+    state.blocked.map((item) => {
+      if (item.month === state.monthCount) {
+        const element = document.getElementById(`${item.day}`);
+        element?.classList.remove("bg-white");
+        element?.classList.remove("hover:border-4");
+        element?.classList.add("bg-red-500");
+      }
+    });
+  }, [state.semiblocked, state.blocked]);
+
+  const click = (day:number, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const target = e.target  as HTMLElement
+
+    !target.classList.contains("bg-red-500")&&(state.blockMode ? dispatch({ type: "semiblocked", day: day }) : dispatch({ type: "auto-input", day: day, month: state.monthCount }))
+  }
+
   return (
     <div className="lg:w-11/12 w-full lg:h-full min-h-0 h-full rounded-full" style={{ height: state.height, minHeight: "540px" }}>
       <div className="w-full h-full flex flex-col lg:grid grid-rows-5 grid-cols-7 overflow-scroll lg:overflow-hidden bg-slate-300 gap-1">
         {[...Array(new Date(new Date().getFullYear() - 1, state.monthCount + 1, 0).getDate())].map((undef, i) => {
           return (
-            <div key={i + 1} onClick={ () => dispatch({ type: "auto-input", day: i + 1, month: state.monthCount })} style={{gridColumnStart: i === 0?columnStart:"", background: "white"}} className={`flex transition-all border-red-500 ${state.blockMode&&"hover:border-4"}`}>
+            <div key={i + 1} id={(i + 1).toString()} onClick={(e) => click(i+1, e)} style={{ gridColumnStart: i === 0 ? columnStart : "" }} className={` flex transition-all border-red-500 ${state.blockMode && "hover:border-4"} bg-white`}>
               <p className={`${i + 1 === new Date().getDate() && new Date().getMonth() + 12 === state.monthCount ? "bg-red-500" : "bg-gray-500"} w-fit p-2 pt-1 pl-1 text-lg text-white font-semibold rounded-br-full h-min`}>{i + 1}</p>
               <div className="flex flex-col overflow-y-scroll mx-auto">
                 {state.calendarData

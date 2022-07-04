@@ -107,14 +107,30 @@ const reducer = (state: state, actions: actions) => {
       return { ...state, calendarData: actions.data, loading: [...state.loading, true] };
 
     case "block-mode":
-      return {...state, administration: false, blockMode: !state.blockMode}
+      actions.act &&
+        state.semiblocked.map((item) => {
+          const id = nanoid();
+          setDoc(doc(db, "blocked", id), {
+            ...item,
+            id: id,
+          });
+        });
+
+      return { ...state, administration: false, blockMode: !state.blockMode, semiblocked: initial.semiblocked };
+
+    case "semiblocked":
+      const check = state.semiblocked.some((item) => JSON.stringify(item) === JSON.stringify({ day: actions.day, month: state.monthCount }));
+      return { ...state, semiblocked: !check ? [...state.semiblocked, { day: actions.day, month: state.monthCount }] : state.semiblocked };
+
+    case "set-blocked":
+      return { ...state, blocked: actions.data };
   }
 };
 
 export const App = () => {
   const [state, dispatch] = useReducer(reducer, initial);
-  const checkbox = useRef<HTMLInputElement>(null!)
-  
+  const checkbox = useRef<HTMLInputElement>(null!);
+
   const validateLogin = Object.keys(state.user).every((item) => state.user[item as "name" | "photo" | "email"]?.length);
   const navigation = useNavigate();
   useEffect(() => {
@@ -133,10 +149,27 @@ export const App = () => {
       dispatch({ type: "calendar-data", data: arr });
     });
 
+    onSnapshot(collection(db, "blocked"), (item) => {
+      interface structure {
+        day: number;
+        month: number;
+        id: string;
+      }
+      let arr: structure[] = [];
+      item.forEach((doc) => {
+        arr.push(doc.data() as structure);
+      });
+
+      dispatch({ type: "set-blocked", data: arr });
+    });
   }, []);
 
-  useEffect(() => (validateLogin ? (localStorage.setItem("user", JSON.stringify(state.user)), navigation("/dashboard")) : (localStorage.removeItem("user"), navigation("/"))), [validateLogin, state.user, navigation]);
+  useEffect(()=>{
 
+  },[state.blocked])
+
+  useEffect(() => (validateLogin ? (localStorage.setItem("user", JSON.stringify(state.user)), navigation("/dashboard")) : (localStorage.removeItem("user"), navigation("/"))), [validateLogin, state.user, navigation]);
+  console.log(state.semiblocked, state.blocked);
   return (
     <Routes>
       <Route path="/" element={<SignIn state={state} dispatch={dispatch} validateLogin={validateLogin} />}></Route>
