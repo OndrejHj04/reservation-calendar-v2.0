@@ -22,7 +22,7 @@ initializeApp(firebaseConfig);
 export const db = getFirestore();
 const validateSubmit = (form: form) => {
   const condition1 = form.day.length && form.month.length && Object.keys(form.inputs).every((item) => form.inputs[(item as "fromHours", "toHours", "fromMinutes", "toMinutes")].length); //each item should have at least some length
-  const condition2 = Number(form.inputs.fromHours) > 7 && Number(form.inputs.toHours) > 7 && Number(form.inputs.fromHours) < 19 && Number(form.inputs.toHours) < 19; //hours must be between 8 and 18
+  const condition2 = Number(form.inputs.fromHours) > openHour-1 && Number(form.inputs.toHours) > openHour-1 && Number(form.inputs.fromHours) < closingHour-1 && Number(form.inputs.toHours) < closingHour-1; //hours must be between 8 and 18
   const condition3 = Number(form.inputs.fromMinutes) > -1 && Number(form.inputs.toMinutes) > -1 && Number(form.inputs.fromMinutes) < 60 && Number(form.inputs.toMinutes) < 60; //seconds must be between 0 and  59
   const condition4 = (Number(form.inputs.toHours) - Number(form.inputs.fromHours)) * 60 + (Number(form.inputs.toMinutes) - Number(form.inputs.fromMinutes)) >= 30;
   const condition5 = form.inputs.fromMinutes.length > 1 && form.inputs.toMinutes.length > 1;
