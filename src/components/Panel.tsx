@@ -8,11 +8,11 @@ export const Panel = ({ state, dispatch, month, checkbox }: { state: state; disp
     dispatch({ type: "logout" });
     navigate("/");
   };
-  console.log(state)
+
   return (
     <div className="flex-1 h-full text-2xl p-2" style={{ height: "auto", minHeight: state.height }}>
       <div className="sm:w-full h-full flex flex-col py-1" id="calendar-container">
-        {month === "červenec" || month === "srpen" ? (
+        {new Date().getMonth() === 6||7? (
           <>
             <h1 className="text-center">hezké letní prázdniny a naviděnou v novém školním roce!</h1>
             <img src={require("../images/sun.png")} alt="" className="m-3"/>
