@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef } from "react";
+import { createContext, useEffect, useReducer, useRef } from "react";
 import { SignIn } from "./components/SignIn";
 import { actions, form, initial, state } from "./support/types";
 import { Dashboard } from "./components/Dashboard";
@@ -15,6 +15,7 @@ const firebaseConfig = {
   messagingSenderId: "5681576630",
   appId: "1:5681576630:web:f6263c44d9233589998417",
 };
+export const monthContext = createContext("")
 const openHour = 8;
 const closingHour = 19;
 const dayMinutes = (closingHour - openHour) * 60;
@@ -125,6 +126,7 @@ const reducer = (state: state, actions: actions) => {
 export const App = () => {
   const [state, dispatch] = useReducer(reducer, initial);
   const checkbox = useRef<HTMLInputElement>(null!);
+  const month = new Date(new Date().getFullYear(), state.monthCount).toLocaleDateString("cs", { month: "long" });
   
   const validateLogin = Object.keys(state.user).every((item) => state.user[item as "name" | "photo" | "email"]?.length);
   const navigation = useNavigate();
@@ -172,7 +174,7 @@ export const App = () => {
   return (
     <Routes>
       <Route path="/" element={<SignIn state={state} dispatch={dispatch} validateLogin={validateLogin} />}></Route>
-      <Route path="/dashboard" element={<Dashboard state={state} dispatch={dispatch} checkbox={checkbox} />}></Route>
+      <Route path="/dashboard" element={<monthContext.Provider value={month}><Dashboard state={state} dispatch={dispatch} checkbox={checkbox} /></monthContext.Provider>}></Route>
       <Route path="*" element={<FourOhFour />} />
     </Routes>
   );

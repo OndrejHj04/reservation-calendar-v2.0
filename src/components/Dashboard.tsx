@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { createContext, useRef } from "react";
 import { state } from "../support/types";
 import { actions } from "../support/types";
 import { Calendar } from "./Calendar";
@@ -6,7 +6,6 @@ import { Panel } from "./Panel";
 import { Administartion } from "./Administration";
 export const Dashboard = ({ state, dispatch, checkbox }: { state: state; dispatch: React.Dispatch<actions>; checkbox: React.MutableRefObject<HTMLInputElement> }) => {
   const loading = useRef<HTMLImageElement>(null);
-  const month = new Date(new Date().getFullYear(), state.monthCount).toLocaleDateString("cs", { month: "long" });
 
   return (
     <>
@@ -17,11 +16,12 @@ export const Dashboard = ({ state, dispatch, checkbox }: { state: state; dispatc
       ) : (
         <div className="flex flex-row">
           {state.administration ? (
-            <Administartion  state={state} dispatch={dispatch}/>
+            <Administartion state={state} dispatch={dispatch} />
           ) : (
             <>
-              <Calendar dispatch={dispatch} state={state} />
-              <Panel month={month} state={state} dispatch={dispatch} checkbox={checkbox}/>
+              <Calendar dispatch={dispatch} blockMode={state.blockMode} monthCount={state.monthCount} height={state.height} calendarData={state.calendarData} semiblocked={state.semiblocked} blocked={state.blocked} />
+
+              <Panel state={state} dispatch={dispatch} checkbox={checkbox} />
             </>
           )}
         </div>

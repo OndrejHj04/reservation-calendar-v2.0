@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { actions, state } from "../support/types";
-
-export const Panel = ({ state, dispatch, month, checkbox }: { state: state; dispatch: React.Dispatch<actions>; month: string; checkbox: React.MutableRefObject<HTMLInputElement> }) => {
+import { monthContext } from "../App";
+export const Panel = ({ state, dispatch, checkbox }: { state: state; dispatch: React.Dispatch<actions>; checkbox: React.MutableRefObject<HTMLInputElement> }) => {
   const navigate = useNavigate();
 
   const logout = () => {
@@ -15,16 +15,22 @@ export const Panel = ({ state, dispatch, month, checkbox }: { state: state; disp
         {new Date().getMonth() === 6||7? (
           <>
             <h1 className="text-center">hezké letní prázdniny a naviděnou v novém školním roce!</h1>
-            <img src={require("../images/sun.png")} alt="" className="m-3"/>
+            <img src={require("../images/sun.png")} alt="" className="m-3" />
           </>
         ) : (
           <>
-            <div className="flex justify-between">
-              <img src={require("../images/next.png")} alt="" className="w-6 h-8 rotate-180" onClick={() => dispatch({ type: "change-month", action: "decrease" })} />
-              <h1 className="mx-auto my-auto text-xl">{month}</h1>
+            <monthContext.Consumer>
+              {(month) => {
+                return (
+                  <div className="flex justify-between">
+                    <img src={require("../images/next.png")} alt="" className="w-6 h-8 rotate-180" onClick={() => dispatch({ type: "change-month", action: "decrease" })} />
+                    <h1 className="mx-auto my-auto text-xl">{month}</h1>
 
-              <img src={require("../images/next.png")} alt="" className="w-6 h-8" onClick={() => dispatch({ type: "change-month", action: "increase" })} />
-            </div>
+                    <img src={require("../images/next.png")} alt="" className="w-6 h-8" onClick={() => dispatch({ type: "change-month", action: "increase" })} />
+                  </div>
+                );
+              }}
+            </monthContext.Consumer>
 
             {!state.blockMode ? (
               <>

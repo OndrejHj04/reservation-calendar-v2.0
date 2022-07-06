@@ -6,7 +6,7 @@ export const SignIn = ({ state, dispatch, validateLogin }: { state: state, dispa
     signInWithGoogle().then(res=>dispatch({type: "user", email: res.user.email!, photo: res.user.photoURL!, name: res.user.displayName!}))
   };
 
-
+  
   return (
     <>
       <div style={{ height: state.height }} className="flex w-screen">
